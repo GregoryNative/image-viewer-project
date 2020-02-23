@@ -1,6 +1,6 @@
 // @flow
+import type { State } from '../../types/store';
 
-export const selectHiResImage = (state: Object, imageId: number) =>
-  state.detailViewReducer.hiResPictures.find(
-    hiResPic => hiResPic.id === imageId,
-  );
+export const hiResPictures = (state: State) =>
+  state.detailViewReducer.hiResPictures;
+export const isLoading = (state: State) => state.detailViewReducer.isLoading;

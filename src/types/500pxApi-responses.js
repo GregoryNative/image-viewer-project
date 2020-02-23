@@ -1,5 +1,5 @@
 // @flow
-import type { Picture } from './pictures';
+import type { Picture, PictureDetails } from './pictures';
 
 type ApiResponse<T> = {
   data: T,
@@ -15,3 +15,5 @@ export type ImagesResponse = ApiResponse<{
   page: number,
   pictures: Array<Picture>,
 }>;
+
+export type ImageDetailsResponse = ApiResponse<PictureDetails>;

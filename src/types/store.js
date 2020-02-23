@@ -1,5 +1,5 @@
 // @flow
-import type { Picture } from './pictures';
+import type { Picture, PictureDetails } from './pictures';
 
 export type HomeReducer = {
   pictures: Array<Picture>,
@@ -8,9 +8,12 @@ export type HomeReducer = {
   errorMessage: string,
 };
 
+export type HiResPicturesShape = { [key: string]: PictureDetails };
+
 export type DetailViewReducer = {
-  hiResPictures: Array<any>,
+  hiResPictures: HiResPicturesShape,
   isLoading: boolean,
+  errorMessage: string,
 };
 
 export type State = {

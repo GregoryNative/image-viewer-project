@@ -1,44 +1,52 @@
 // @flow
 import * as React from 'react';
-import DetailView from '../../screens/DetailView';
+import { Share } from 'react-native';
 import { connect } from 'react-redux';
+
+import DetailView from '../../screens/DetailView';
+
 import { fetchPictureDetails } from './actions';
-import { selectHiResImage } from './selectors';
+
+import * as selectors from './selectors';
+
+import Colors from '../../constants/Colors';
+
+import type { HiResPicturesShape } from '../../types/store';
 
 export interface Props {
   navigation: any;
   fetchPictureDetails: Function;
   isLoading: boolean;
-  hiResImage: Function;
-}
-export interface State {
-  imageUrl: string;
+  hiResPictures?: HiResPicturesShape;
 }
 
-class DetailViewContainer extends React.Component<Props, State> {
+class DetailViewContainer extends React.Component<Props> {
   static navigationOptions = {
     headerStyle: {
-      backgroundColor: 'transparent',
-      position: 'absolute',
-      height: 50,
-      top: 0,
-      left: 0,
-      right: 0,
-      borderBottomWidth: 0,
+      backgroundColor: Colors.header,
     },
-    headerTintColor: '#FFF',
+    headerTintColor: Colors.headerTitle,
   };
 
   componentDidMount() {
-    const { navigation, fetchPictureDetails } = this.props;
+    const { navigation, fetchPictureDetails, hiResPictures } = this.props;
     const { pictureDetails } = navigation.state.params;
-    if (!this.props.hiResImage(pictureDetails.id)) {
+
+    if (!hiResPictures[pictureDetails.id]) {
       fetchPictureDetails(pictureDetails.id);
     }
   }
 
   share = (imageId: number): void => {
-    // TODO: implement share function
+    const { pictureDetails } = this.props.navigation.state.params;
+    const { hiResPictures } = this.props;
+    const fullPictureDetails = hiResPictures[pictureDetails.id];
+
+    if (!fullPictureDetails) {
+      return;
+    }
+
+    Share.share({ message: fullPictureDetails.full_picture });
   };
 
   applyFilter = (type): void => {
@@ -47,12 +55,14 @@ class DetailViewContainer extends React.Component<Props, State> {
 
   render() {
     const { pictureDetails } = this.props.navigation.state.params;
-    const imageURL = pictureDetails.full_picture;
-    const { isLoading, hiResImage } = this.props;
+    const imageURL = pictureDetails.cropped_picture;
+    const { isLoading, hiResPictures } = this.props;
+    const fullPictureDetails = hiResPictures[pictureDetails.id];
+
     return (
       <DetailView
-        imageUrl={imageURL}
-        pictureDetails={pictureDetails}
+        imageUrl={fullPictureDetails?.full_picture || imageURL}
+        pictureDetails={fullPictureDetails}
         shareCallback={this.share}
         isLoading={isLoading}
         applyFilterCallback={this.applyFilter}
@@ -61,18 +71,16 @@ class DetailViewContainer extends React.Component<Props, State> {
   }
 }
 
-function bindAction(dispatch) {
-  return {
-    fetchPictureDetails: imageId => dispatch(fetchPictureDetails(imageId)),
-  };
-}
-
 const mapStateToProps = state => ({
-  hiResImage: imageId => selectHiResImage(state, imageId),
-  isLoading: state.detailViewReducer.isLoading,
+  hiResPictures: selectors.hiResPictures(state),
+  isLoading: selectors.isLoading(state),
 });
+
+const mapDispatchToProps = {
+  fetchPictureDetails,
+};
 
 export default connect(
   mapStateToProps,
-  bindAction,
+  mapDispatchToProps,
 )(DetailViewContainer);

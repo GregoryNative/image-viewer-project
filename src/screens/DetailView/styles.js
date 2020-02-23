@@ -1,4 +1,7 @@
 import { Dimensions, StyleSheet } from 'react-native';
+
+import Colors from '../../constants/Colors';
+
 const { width } = Dimensions.get('window');
 
 const styles: any = StyleSheet.create({
@@ -26,15 +29,36 @@ const styles: any = StyleSheet.create({
     position: 'absolute',
   },
   detailView: {
+    width,
     position: 'absolute',
-    bottom: 10,
-    width: 120,
-    right: 10,
+    bottom: 0,
+    left: 0,
+    right: 0,
     flexDirection: 'row',
+    backgroundColor: Colors.detailViewFooter,
+    padding: 10,
+  },
+  detailViewDescription: {
+    flex: 1,
+  },
+  detailViewAuthor: {
+    fontSize: 26,
+    color: '#fff',
+  },
+  detailViewCamera: {
+    fontSize: 20,
+    color: '#fff',
+  },
+  detailViewButtons: {
+    flexDirection: 'row',
+  },
+  shareButton: {
+    marginRight: 10,
   },
   detailViewImage: {
     width: 50,
     height: 50,
   },
 });
+
 export default styles;
