@@ -1,3 +1,4 @@
+// @flow
 import {getPictures} from '../../services/500pxAPI';
 import type {
   ActionWithPayload,
