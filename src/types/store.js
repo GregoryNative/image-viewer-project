@@ -4,6 +4,8 @@ import type { Picture, PictureDetails } from './pictures';
 export type HomeReducer = {
   pictures: Array<Picture>,
   isLoading: boolean,
+  isRefreshing: boolean,
+  hasMore: boolean,
   page: number,
   errorMessage: string,
 };

@@ -1,13 +1,10 @@
 // @flow
 import * as React from 'react';
-import {
-  FlatList,
-  Dimensions,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { FlatList, Dimensions, StyleSheet, View } from 'react-native';
 
 import ListItem from './components/ListItem';
+
+import Spinner from '../../components/Spinner';
 
 import styles from './styles';
 
@@ -63,23 +60,30 @@ class HomeView extends React.PureComponent<Props> {
     );
   };
 
-  // TODO: it would be great to see here some loader and non-flickering layout
   render() {
-    const { isLoading, page, pictures, onLoadNext, onRefresh } = this.props;
+    const {
+      isRefreshing,
+      isLoading,
+      page,
+      pictures,
+      onLoadNext,
+      onRefresh,
+    } = this.props;
 
     return (
       <View style={styles.page}>
         <FlatList
           removeClippedSubviews
-          refreshing={isLoading}
-          initialNumToRender={20}
+          refreshing={isRefreshing}
+          initialNumToRender={10}
           data={pictures}
           onRefresh={onRefresh}
           numColumns={2}
           renderItem={this._renderPicture}
           keyExtractor={(item, index) => keyExtractor(item, page, index)}
           onEndReached={onLoadNext}
-          onEndReachedThreshold={0.5}
+          onEndReachedThreshold={0.2}
+          ListFooterComponent={isLoading ? <Spinner /> : null}
         />
       </View>
     );

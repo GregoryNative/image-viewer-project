@@ -4,7 +4,7 @@ const styles: any = StyleSheet.create({
   page: {
     flex: 1,
     alignItems: 'stretch',
-    backgroundColor: 'black',
+    backgroundColor: 'aliceblue',
   },
   errorContainer: {
     padding: 30,

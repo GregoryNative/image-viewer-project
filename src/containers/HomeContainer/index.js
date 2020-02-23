@@ -18,6 +18,8 @@ export interface Props {
   pictures: Array<Picture>;
   page: number;
   isLoading: boolean;
+  isRefreshing: boolean;
+  hasMore: boolean;
 }
 
 class HomeContainer extends React.Component<Props> {
@@ -36,14 +38,26 @@ class HomeContainer extends React.Component<Props> {
   }
 
   componentDidMount() {
-    this.onRefresh();
+    this.onLoadNext();
   }
 
   onRefresh = () => {
-    this.props.fetchPictures();
+    const { isLoading, isRefreshing } = this.props;
+
+    if (isLoading || isRefreshing) {
+      return;
+    }
+
+    this.props.fetchPictures(true);
   };
 
   onLoadNext = () => {
+    const { isLoading, isRefreshing, hasMore } = this.props;
+
+    if (isLoading || isRefreshing || !hasMore) {
+      return;
+    }
+
     this.props.fetchPictures();
   };
 
@@ -62,6 +76,8 @@ const mapStateToProps = state => ({
   pictures: selectors.pictures(state),
   page: selectors.page(state),
   isLoading: selectors.isLoading(state),
+  isRefreshing: selectors.isRefreshing(state),
+  hasMore: selectors.hasMore(state),
 });
 
 const mapDispatchToProps = {
