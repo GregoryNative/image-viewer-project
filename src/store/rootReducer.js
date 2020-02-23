@@ -1,4 +1,4 @@
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
 
 import homeReducer from '../containers/HomeContainer/reducer';
 import detailViewReducer from '../containers/DetailViewContainer/reducer';

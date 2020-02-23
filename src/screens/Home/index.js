@@ -2,7 +2,6 @@
 import * as React from 'react';
 import {
   FlatList,
-  ActivityIndicator,
   Dimensions,
   StyleSheet,
   View,
@@ -11,40 +10,49 @@ import {
 import ListItem from './components/ListItem';
 
 import styles from './styles';
-import {Props} from '../../containers/HomeContainer/index'; // use same Props as Main Container
 
-const keyExtractor = (item, page) => item.id.toString() + page;
+import type { Props as ContainerProps } from '../../containers/HomeContainer';
+import type { Picture } from '../../types/pictures';
+
+const keyExtractor = (item, page, index) =>
+  `${item.id.toString()}${page}${index}`;
+
+type Props = ContainerProps & {
+  onLoadNext: Function,
+  onRefresh: Function,
+};
 
 class HomeView extends React.PureComponent<Props> {
   imageThumbnailStylePortrait = null;
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this._prepareStyles(); // create styles once to avoid object literals and use RN style optimization
-    this._renderPicture = this._renderPicture.bind(this);
-    this._openPicture = this._openPicture.bind(this);
   }
 
   _prepareStyles(): void {
-    const {height, width} = Dimensions.get('window');
+    const { height, width } = Dimensions.get('window');
     const realWidth = height > width ? width : height;
     const portraitImageSize = realWidth / 2 - 10;
+
     this.imageThumbnailStylePortrait = StyleSheet.flatten({
       width: portraitImageSize,
       height: portraitImageSize,
     });
   }
 
-  _openPicture(imageId: number): void {
-    const {pictures, navigation} = this.props;
+  _openPicture = (imageId: number) => {
+    const { pictures, navigation } = this.props;
+
     navigation.navigate('DetailView', {
       pictureDetails: pictures.find(pic => pic.id === imageId),
     });
-  }
+  };
 
-  _renderPicture(picture) {
-    const imageURL = picture.item.cropped_picture;
-    const imageId = picture.item.id;
+  _renderPicture = ({ item }: { item: Picture }) => {
+    const imageURL = item.cropped_picture;
+    const imageId = item.id;
+
     return (
       <ListItem
         imageUrl={imageURL}
@@ -53,11 +61,12 @@ class HomeView extends React.PureComponent<Props> {
         openPicture={this._openPicture}
       />
     );
-  }
+  };
 
   // TODO: it would be great to see here some loader and non-flickering layout
   render() {
-    const {isLoading, page, pictures, onLoadNext, onRefresh} = this.props;
+    const { isLoading, page, pictures, onLoadNext, onRefresh } = this.props;
+
     return (
       <View style={styles.page}>
         <FlatList
@@ -68,9 +77,9 @@ class HomeView extends React.PureComponent<Props> {
           onRefresh={onRefresh}
           numColumns={2}
           renderItem={this._renderPicture}
-          keyExtractor={item => keyExtractor(item, page)}
+          keyExtractor={(item, index) => keyExtractor(item, page, index)}
           onEndReached={onLoadNext}
-          onEndThreshold={2}
+          onEndReachedThreshold={0.5}
         />
       </View>
     );

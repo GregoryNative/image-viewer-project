@@ -1,7 +1,7 @@
 // @flow
 
-import {getPictureDetails} from '../../services/500pxAPI';
-import {FETCH_FAILED} from '../HomeContainer/actions';
+import { getPictureDetails } from '../../services/500pxAPI';
+import { FETCH_FAILED } from '../HomeContainer/actions';
 import type {
   ActionWithPayload,
   ActionWithoutPayload,

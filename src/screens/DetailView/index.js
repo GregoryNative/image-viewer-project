@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import {View, Image} from 'react-native';
+import { View, Image } from 'react-native';
 
 import styles from './styles';
 import DetailsFooter from './components/DetailsFooter';
@@ -27,7 +27,7 @@ class DetailView extends React.PureComponent<Props> {
     return (
       <View style={styles.container}>
         <View style={styles.imageContainer}>
-          <Image source={{uri: imageUrl}} style={styles.imageStyle} />
+          <Image source={{ uri: imageUrl }} style={styles.imageStyle} />
         </View>
         <DetailsFooter
           pictureDetails={pictureDetails}

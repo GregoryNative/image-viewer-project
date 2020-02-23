@@ -1,9 +1,9 @@
 // @flow
 import * as React from 'react';
 import DetailView from '../../screens/DetailView';
-import {connect} from 'react-redux';
-import {fetchPictureDetails} from './actions';
-import {selectHiResImage} from './selectors';
+import { connect } from 'react-redux';
+import { fetchPictureDetails } from './actions';
+import { selectHiResImage } from './selectors';
 
 export interface Props {
   navigation: any;
@@ -30,8 +30,8 @@ class DetailViewContainer extends React.Component<Props, State> {
   };
 
   componentDidMount() {
-    const {navigation, fetchPictureDetails} = this.props;
-    const {pictureDetails} = navigation.state.params;
+    const { navigation, fetchPictureDetails } = this.props;
+    const { pictureDetails } = navigation.state.params;
     if (!this.props.hiResImage(pictureDetails.id)) {
       fetchPictureDetails(pictureDetails.id);
     }
@@ -46,9 +46,9 @@ class DetailViewContainer extends React.Component<Props, State> {
   };
 
   render() {
-    const {pictureDetails} = this.props.navigation.state.params;
+    const { pictureDetails } = this.props.navigation.state.params;
     const imageURL = pictureDetails.full_picture;
-    const {isLoading, hiResImage} = this.props;
+    const { isLoading, hiResImage } = this.props;
     return (
       <DetailView
         imageUrl={imageURL}

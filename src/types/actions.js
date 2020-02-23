@@ -1,7 +1,7 @@
 // @flow
-export type ActionWithPayload = {
+export type ActionWithPayload<T> = {
   type: string,
-  payload: Object,
+  payload: T,
 };
 
 export type ActionWithoutPayload = {

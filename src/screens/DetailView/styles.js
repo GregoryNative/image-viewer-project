@@ -1,5 +1,5 @@
-import {Dimensions, StyleSheet} from 'react-native';
-const {width} = Dimensions.get('window');
+import { Dimensions, StyleSheet } from 'react-native';
+const { width } = Dimensions.get('window');
 
 const styles: any = StyleSheet.create({
   container: {

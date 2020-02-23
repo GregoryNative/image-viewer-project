@@ -1,44 +1,51 @@
 // @flow
 import * as React from 'react';
-import {Platform, StatusBar} from 'react-native';
-import {connect} from 'react-redux';
+import { Platform, StatusBar } from 'react-native';
+import { connect } from 'react-redux';
 
 import HomeView from '../../screens/Home';
-import {fetchPictures} from './actions';
+
+import { fetchPictures } from './actions';
+import * as selectors from './selectors';
+
+import Colors from '../../constants/Colors';
+
+import type { Picture } from '../../types/pictures';
 
 export interface Props {
   navigation: any;
   fetchPictures: Function;
-  pictures: Array<Object>;
+  pictures: Array<Picture>;
+  page: number;
   isLoading: boolean;
 }
 
-export interface State {}
-
-class HomeContainer extends React.Component<Props, State> {
+class HomeContainer extends React.Component<Props> {
   static navigationOptions = {
-    header: null,
+    title: 'Gallery App',
+    headerStyle: {
+      backgroundColor: Colors.header,
+    },
+    headerTintColor: Colors.headerTitle,
   };
 
   constructor(props) {
     super(props);
     StatusBar.setBarStyle('light-content');
-    Platform.OS === 'android' && StatusBar.setBackgroundColor('#000');
-    this.onRefresh = this.onRefresh.bind(this);
-    this.onLoadNext = this.onLoadNext.bind(this);
+    Platform.OS === 'android' && StatusBar.setBackgroundColor(Colors.statusBar);
   }
 
   componentDidMount() {
     this.onRefresh();
   }
 
-  onRefresh(): void {
-    this.props.fetchPictures(1);
-  }
+  onRefresh = () => {
+    this.props.fetchPictures();
+  };
 
-  onLoadNext(): void {
-    // TODO: implement me
-  }
+  onLoadNext = () => {
+    this.props.fetchPictures();
+  };
 
   render() {
     return (
@@ -51,19 +58,17 @@ class HomeContainer extends React.Component<Props, State> {
   }
 }
 
-function bindAction(dispatch) {
-  return {
-    fetchPictures: page => dispatch(fetchPictures(page)),
-  };
-}
-
 const mapStateToProps = state => ({
-  pictures: state.homeReducer.pictures,
-  page: state.homeReducer.page,
-  isLoading: state.homeReducer.isLoading,
+  pictures: selectors.pictures(state),
+  page: selectors.page(state),
+  isLoading: selectors.isLoading(state),
 });
+
+const mapDispatchToProps = {
+  fetchPictures,
+};
 
 export default connect(
   mapStateToProps,
-  bindAction,
+  mapDispatchToProps,
 )(HomeContainer);

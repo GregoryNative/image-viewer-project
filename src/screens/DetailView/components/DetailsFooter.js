@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {TouchableOpacity, Image, View} from 'react-native';
+import { TouchableOpacity, Image, View } from 'react-native';
 import styles from '../styles';
 import imageFiltersImage from './images/ImageFilters.png';
 import shareImage from './images/ShareThis.png';
@@ -12,7 +12,7 @@ type Props = {
 
 class DetailsFooter extends React.PureComponent<Props> {
   render() {
-    const {shareCallback, applyFilterCallback, pictureDetails} = this.props;
+    const { shareCallback, applyFilterCallback, pictureDetails } = this.props;
     if (!pictureDetails) {
       return null;
     }
@@ -20,7 +20,7 @@ class DetailsFooter extends React.PureComponent<Props> {
     return (
       <View style={styles.detailView}>
         <TouchableOpacity
-          style={{marginRight: 10}}
+          style={{ marginRight: 10 }}
           onPress={() => applyFilterCallback()}>
           <Image
             style={styles.detailViewImage}
@@ -29,7 +29,7 @@ class DetailsFooter extends React.PureComponent<Props> {
           />
         </TouchableOpacity>
         <TouchableOpacity
-          style={{alignSelf: 'flex-end'}}
+          style={{ alignSelf: 'flex-end' }}
           onPress={() => shareCallback(imageId)}>
           <Image
             style={styles.detailViewImage}
